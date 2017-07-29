@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_main"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.example.fariha.editprofile.MainActivity">
+
+        <TextView
+        android:text=" Edit Profile"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editProfileLab" />
+
+
+    <ImageView
+        android:id="@+id/myImage"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
+        android:layout_gravity="center"
+        android:padding="10sp"
+        android:layout_margin="20sp"
+        android:src="@drawable/myimage"
+         />
+
+    <Button
+        android:text="upload"
+        android:layout_width="100sp"
+        android:layout_height="50sp"
+        android:id="@+id/addButton"
+        android:layout_gravity="center"
+         />
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:text="About (Full Name)"
+            android:textSize="30sp"
+            android:id="@+id/name"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:id="@+id/about"
+            android:textSize="30sp"
+            android:padding="20sp"
+            android:maxLength="500"
+            />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:padding="20sp"
+            android:text="Profile Title"
+            android:id="@+id/profile"
+            />
+       <!-- <View
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@android:color/darker_gray"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show my other accounts"
+            android:textSize="30sp"
+            android:padding="20sp" />
+       <!-- <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connect with facebook"
+            android:id="@+id/facebookButton"
+            />-->
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="20sp"
+            android:layout_marginBottom="20sp"
+            android:id="@+id/facebookButton">
+        </com.facebook.login.widget.LoginButton>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:padding="20sp"
+            android:text="Gender"
+            />
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:id="@+id/male"
+                android:onClick="genderButtonClicked"
+
+                />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female"
+                android:id="@+id/female"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:onClick="genderButtonClicked"
+                />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I don't wish to specify"
+                android:id="@+id/none"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:onClick="genderButtonClicked"
+                />
+
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of birth:"
+            android:textSize="30sp"
+            android:padding="20sp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:text="03/09/1996"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20sp"
+                android:id="@+id/dateChangeButton"
+                android:onClick="setDate"
+                android:text="Change"
+                />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@android:color/darker_gray"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:layout_width="250sp"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch1"
+
+                android:text="My Field Of Work"/>
+            <ImageView
+
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginTop="40sp"
+                android:layout_marginLeft="45sp"
+
+                android:id="@+id/Thumb1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:layout_width="250sp"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:id="@+id/switch2"
+                android:layout_height="wrap_content"
+                android:text="My Industry"/>
+            <ImageView
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginLeft="45sp"
+                android:id="@+id/Thumb2"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:layout_width="250sp"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:id="@+id/switch3"
+                android:layout_height="wrap_content"
+                android:text="I would like to volunteer for"/>
+            <ImageView
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginLeft="45sp"
+
+                android:id="@+id/Thumb3"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:layout_width="250sp"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:id="@+id/switch4"
+                android:layout_height="wrap_content"
+                android:text="I would like to sponsor for"/>
+            <ImageView
+
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginLeft="45sp"
+                android:id="@+id/Thumb4"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:layout_width="250sp"
+                android:textSize="30sp"
+                android:padding="20sp"
+                android:id="@+id/switch5"
+                android:layout_height="wrap_content"
+                android:text="I would like to invest in"/>
+
+            <ImageView
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginTop="30sp"
+                android:layout_marginLeft="45sp"
+                android:id="@+id/Thumb5"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</ScrollView>
