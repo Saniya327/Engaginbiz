@@ -86,14 +86,34 @@
             android:text="Connect with facebook"
             android:id="@+id/facebookButton"
             />-->
-        <com.facebook.login.widget.LoginButton
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:layout_height="30sp"
             android:textSize="20sp"
             android:padding="20sp"
             android:layout_marginBottom="20sp"
             android:id="@+id/facebookButton">
         </com.facebook.login.widget.LoginButton>
+
+            <ImageView
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginLeft="20sp"
+                android:id="@+id/connectedFb"/>
+
+            <ImageButton
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_marginLeft="20sp"
+                android:src="@drawable/cross"
+                android:id="@+id/removeFb"/>
+
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1sp"
