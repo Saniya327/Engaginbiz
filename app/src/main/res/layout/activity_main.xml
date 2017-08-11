@@ -114,6 +114,14 @@
                 android:id="@+id/removeFb"/>
 
         </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login with github"
+            android:layout_margin="20sp"
+            android:id="@+id/githubButton"
+            />
         <View
             android:layout_width="match_parent"
             android:layout_height="1sp"
