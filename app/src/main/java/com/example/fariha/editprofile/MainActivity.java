@@ -1,19 +1,12 @@
     package com.example.fariha.editprofile;
 
-    import android.Manifest;
+
     import android.app.DatePickerDialog;
     import android.app.Dialog;
     import android.content.Intent;
-    import android.content.pm.PackageManager;
-    import android.database.Cursor;
     import android.graphics.BitmapFactory;
     import android.net.Uri;
-    import android.os.Build;
-    import android.os.Environment;
-    import android.provider.MediaStore;
     import android.support.annotation.NonNull;
-    import android.support.v4.app.ActivityCompat;
-    import android.support.v4.content.ContextCompat;
     import android.support.v7.app.AppCompatActivity;
     import android.os.Bundle;
     import android.util.Log;
@@ -21,6 +14,7 @@
     import android.widget.Button;
     import android.widget.CompoundButton;
     import android.widget.DatePicker;
+    //import com.example.fariha.editprofile.AccessToken
     import android.widget.EditText;
     import android.widget.ImageButton;
     import android.widget.ImageView;
@@ -44,18 +38,29 @@
     import com.google.firebase.auth.FacebookAuthProvider;
     import com.google.firebase.auth.FirebaseAuth;
     import com.google.firebase.auth.FirebaseUser;
-    import com.google.firebase.auth.GithubAuthProvider;
-
     import java.util.Calendar;
+    import java.util.List;
+
+    import retrofit2.Response;
+    import retrofit2.Retrofit;
+    import retrofit2.converter.gson.GsonConverterFactory;
+    import retrofit2.Call;
+    import retrofit2.Callback;
+
 
     import static android.R.attr.data;
 
     public class MainActivity extends AppCompatActivity {
 
         static String TAG="Logging";
+        static final String REDIRECT_URL_CALLBACK="editprofile://callback";
+        boolean signed;
+        private String git_client_id="bd00ac92150a81f5e19f";
+        private String git_client_secret="5580c5792308ad94962a4eee07a8c89cce8f410f";
+
         ImageView myImage,thumb1, thumb2, thumb3, thumb4, thumb5,connectFb;
         ImageButton removeButton;
-        Button addPicture, dateChangeButton;
+        Button addPicture, dateChangeButton,githubButton;
         EditText name, profile, about;
         RadioButton male, female, none;
         LoginButton fbButton;
@@ -68,7 +73,21 @@
         UploadPicture uploadPicture;    //Uploading the picture is done by an object of type UploadPicture
         private CallbackManager callbackManager;
         private FirebaseAuth mAuth;
+        private FirebaseAuth.AuthStateListener mauthListener;
 
+
+        //Checks if user is already logged in
+        @Override
+        public void onStart() {
+            super.onStart();
+            // Check if user is signed in (non-null) and update UI accordingly.
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if(currentUser != null)
+                updateUI("Connected");
+            else
+                updateUI("Not connected");
+            //mAuth.addAuthStateListener(mauthListener);
+        }
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +133,15 @@
             connectFb=(ImageView)findViewById(R.id.connectedFb);
             removeButton=(ImageButton)findViewById(R.id.removeFb);
 
+            githubButton=(Button)findViewById(R.id.githubButton);
+
+            githubButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse("http://github.com/login/oauth/authorize"+"?client_id="+git_client_id+"&scope=repo&redirect_uri="+REDIRECT_URL_CALLBACK));
+                    startActivity(intent);
+                }
+            });
 
 
             //The switches at the end
@@ -212,18 +240,61 @@
                     updateUI("Not connected");
                 }
             });
+
         }
 
-        //Checks if user is already logged in
+        /*public void showPublicGithubRepo(){
+            Retrofit.Builder builder= new Retrofit.Builder().baseUrl("http:/api.github.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+            Retrofit retrofit = builder.build();
+            GitHubClient client= retrofit.create(GitHubClient.class);
+
+            Call<List<GitHubRepo>> call = client.reposForUser("fs-opensource");
+            call.enqueue(new Callback<List<GitHubRepo>>() {
+                @Override
+                public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
+                    //List<GitHubRepo> repos = response.body();
+                }
+
+                @Override
+                public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
+
+                }
+            });
+        }*/
+
         @Override
-        public void onStart() {
-            super.onStart();
-            // Check if user is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if(currentUser != null)
-                updateUI("Connected");
-            else
-                updateUI("Not connected");
+        protected void onResume() {
+            super.onResume();
+            Uri uri= getIntent().getData();
+            if(uri!=null && uri.toString().startsWith(REDIRECT_URL_CALLBACK)){
+                String code=uri.getQueryParameter("code");
+                Retrofit.Builder builder= new Retrofit.Builder().baseUrl("http:/api.github.com/")
+                        .addConverterFactory(GsonConverterFactory.create());
+                Retrofit retrofit = builder.build();
+                GitHubClient client= retrofit.create(GitHubClient.class);
+                Log.v("In on resume","YES");
+
+                Call<GitAccessToken> accessTokenCall=
+                        client.getAccessToken(git_client_id,git_client_secret,code);
+
+                Log.v("Git access token",accessTokenCall.toString());
+                accessTokenCall.enqueue(new Callback<GitAccessToken>() {
+                    @Override
+                    public void onResponse(Call<GitAccessToken> call, Response<GitAccessToken> response) {
+                        Log.v("Success response"," ");
+                        Toast.makeText(MainActivity.this,"TOKEN YES",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<GitAccessToken> call, Throwable t) {
+                        Log.v("In on failure","    ");
+                        Toast.makeText(MainActivity.this,"NOPE",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
         }
 
         //Exchanged facebook access token for firebase token
@@ -265,6 +336,7 @@
 
             }
         }
+
 
         //On choosing a display image
         @Override
