@@ -1,19 +1,12 @@
     package com.example.fariha.editprofile;
 
-    import android.Manifest;
+
     import android.app.DatePickerDialog;
     import android.app.Dialog;
     import android.content.Intent;
-    import android.content.pm.PackageManager;
-    import android.database.Cursor;
     import android.graphics.BitmapFactory;
     import android.net.Uri;
-    import android.os.Build;
-    import android.os.Environment;
-    import android.provider.MediaStore;
     import android.support.annotation.NonNull;
-    import android.support.v4.app.ActivityCompat;
-    import android.support.v4.content.ContextCompat;
     import android.support.v7.app.AppCompatActivity;
     import android.os.Bundle;
     import android.util.Log;
@@ -44,17 +37,27 @@
     import com.google.firebase.auth.FacebookAuthProvider;
     import com.google.firebase.auth.FirebaseAuth;
     import com.google.firebase.auth.FirebaseUser;
-    import com.google.firebase.auth.GithubAuthProvider;
 
+    import java.io.IOException;
     import java.util.Calendar;
+    import java.util.List;
+
+    import retrofit2.Response;
+    import retrofit2.Retrofit;
+    import retrofit2.converter.gson.GsonConverterFactory;
+    import retrofit2.Call;
+    import retrofit2.Callback;
+
 
     import static android.R.attr.data;
 
     public class MainActivity extends AppCompatActivity {
 
         static String TAG="Logging";
-        ImageView myImage,thumb1, thumb2, thumb3, thumb4, thumb5,connectFb;
-        ImageButton removeButton;
+
+
+        ImageView myImage,connectFb;
+        ImageButton removeButton,thumb1, thumb2, thumb3, thumb4, thumb5;
         Button addPicture, dateChangeButton;
         EditText name, profile, about;
         RadioButton male, female, none;
@@ -68,7 +71,21 @@
         UploadPicture uploadPicture;    //Uploading the picture is done by an object of type UploadPicture
         private CallbackManager callbackManager;
         private FirebaseAuth mAuth;
+        private FirebaseAuth.AuthStateListener mauthListener;
 
+
+        //Checks if user is already logged in to facebook
+        @Override
+        public void onStart() {
+            super.onStart();
+            // Check if user is signed in (non-null) and update UI accordingly.
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if(currentUser != null)
+                updateUI("Connected");
+            else
+                updateUI("Not connected");
+            //mAuth.addAuthStateListener(mauthListener);
+        }
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +111,11 @@
             month = calendar.get(Calendar.MONTH);
             day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            thumb1 = (ImageView) findViewById(R.id.Thumb1);
-            thumb2 = (ImageView) findViewById(R.id.Thumb2);
-            thumb3 = (ImageView) findViewById(R.id.Thumb3);
-            thumb4 = (ImageView) findViewById(R.id.Thumb4);
-            thumb5 = (ImageView) findViewById(R.id.Thumb5);
+            thumb1 = (ImageButton) findViewById(R.id.Thumb1);
+            thumb2 = (ImageButton) findViewById(R.id.Thumb2);
+            thumb3 = (ImageButton) findViewById(R.id.Thumb3);
+            thumb4 = (ImageButton) findViewById(R.id.Thumb4);
+            thumb5 = (ImageButton) findViewById(R.id.Thumb5);
 
             switch5 = (Switch) findViewById(R.id.switch5);
             switch4 = (Switch) findViewById(R.id.switch4);
@@ -114,58 +131,6 @@
             connectFb=(ImageView)findViewById(R.id.connectedFb);
             removeButton=(ImageButton)findViewById(R.id.removeFb);
 
-
-
-            //The switches at the end
-            switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        thumb5.setImageResource(R.drawable.thumbsup);
-                    else
-                        thumb5.setImageDrawable(null);
-                }
-            });
-
-            switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        thumb4.setImageResource(R.drawable.thumbsup);
-                    else
-                        thumb4.setImageDrawable(null);
-                }
-            });
-
-            switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        thumb3.setImageResource(R.drawable.thumbsup);
-                    else
-                        thumb3.setImageDrawable(null);
-                }
-            });
-
-            switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        thumb2.setImageResource(R.drawable.thumbsup);
-                    else
-                        thumb2.setImageDrawable(null);
-                }
-            });
-            switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
-                        thumb1.setImageResource(R.drawable.thumbsup);
-                    else
-                        thumb1.setImageDrawable(null);
-                }
-            });
-
             //uploading picture object
             addPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -178,6 +143,62 @@
                     startActivityForResult(i,upload_id );
                 }
             });
+
+            //The switches at the end
+            switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked)
+                        thumb5.setVisibility(View.VISIBLE);
+                    else
+                        thumb5.setVisibility(View.GONE);
+                }
+            });
+
+            switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked)
+                        thumb4.setVisibility(View.VISIBLE);
+                    else
+                        thumb4.setVisibility(View.GONE);
+                }
+            });
+
+            switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked)
+                        thumb3.setVisibility(View.VISIBLE);
+                    else
+                        thumb3.setVisibility(View.GONE);
+                }
+            });
+
+            switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked)
+                        thumb2.setVisibility(View.VISIBLE);
+                    else
+                        thumb2.setVisibility(View.GONE);
+                }
+            });
+
+            switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        thumb1.setVisibility(View.VISIBLE);
+                    }
+
+                    else
+                        thumb1.setVisibility(View.GONE);
+
+                }
+            });
+
+
 
             //Authenticating with facebook
             fbButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
@@ -212,19 +233,12 @@
                     updateUI("Not connected");
                 }
             });
+
         }
 
-        //Checks if user is already logged in
-        @Override
-        public void onStart() {
-            super.onStart();
-            // Check if user is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if(currentUser != null)
-                updateUI("Connected");
-            else
-                updateUI("Not connected");
-        }
+
+
+
 
         //Exchanged facebook access token for firebase token
         private void handleFacebookAccessToken(AccessToken token) {
@@ -265,6 +279,7 @@
 
             }
         }
+
 
         //On choosing a display image
         @Override
