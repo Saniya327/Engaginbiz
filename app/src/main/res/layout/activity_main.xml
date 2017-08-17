@@ -114,6 +114,8 @@
                 android:id="@+id/removeFb"/>
 
         </LinearLayout>
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1sp"
@@ -213,13 +215,14 @@
                 android:id="@+id/switch1"
 
                 android:text="My Field Of Work"/>
-            <ImageView
+            <ImageButton
 
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_marginTop="40sp"
                 android:layout_marginLeft="45sp"
-
+                android:src="@drawable/cross"
+                android:visibility="gone"
                 android:id="@+id/Thumb1"/>
 
         </LinearLayout>
@@ -236,10 +239,12 @@
                 android:id="@+id/switch2"
                 android:layout_height="wrap_content"
                 android:text="My Industry"/>
-            <ImageView
+            <ImageButton
                 android:layout_width="30sp"
                 android:layout_height="30sp"
+                android:visibility="gone"
                 android:layout_marginTop="30sp"
+                android:src="@drawable/cross"
                 android:layout_marginLeft="45sp"
                 android:id="@+id/Thumb2"/>
 
@@ -256,12 +261,13 @@
                 android:id="@+id/switch3"
                 android:layout_height="wrap_content"
                 android:text="I would like to volunteer for"/>
-            <ImageView
+            <ImageButton
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_marginTop="30sp"
                 android:layout_marginLeft="45sp"
-
+                android:src="@drawable/cross"
+                android:visibility="gone"
                 android:id="@+id/Thumb3"/>
 
         </LinearLayout>
@@ -277,11 +283,13 @@
                 android:id="@+id/switch4"
                 android:layout_height="wrap_content"
                 android:text="I would like to sponsor for"/>
-            <ImageView
+            <ImageButton
 
                 android:layout_width="30sp"
                 android:layout_height="30sp"
+                android:src="@drawable/cross"
                 android:layout_marginTop="30sp"
+                android:visibility="gone"
                 android:layout_marginLeft="45sp"
                 android:id="@+id/Thumb4"/>
 
@@ -299,10 +307,12 @@
                 android:layout_height="wrap_content"
                 android:text="I would like to invest in"/>
 
-            <ImageView
+            <ImageButton
                 android:layout_width="30sp"
                 android:layout_height="30sp"
+                android:src="@drawable/cross"
                 android:layout_marginTop="30sp"
+                android:visibility="gone"
                 android:layout_marginLeft="45sp"
                 android:id="@+id/Thumb5"/>
 
